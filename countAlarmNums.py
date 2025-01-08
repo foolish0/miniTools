@@ -18,8 +18,14 @@ warnings_url = 'https://www.emind2000.cloud/rest-api/getWarnings'
 for station_id in station_ids:
     params = {'stationId': station_id}
     response = requests.get(warnings_url, headers=headers, params=params)
-    print(response.json())
-    data = response.json()['data']
+    response_data = response.json()
+
+    # 检查返回的code是否为200
+    if response_data['code'] != 200:
+        print(f"Request for stationId {station_id} failed with response: {response_data}")
+        continue
+
+    data = response_data['data']
     total_count += data['offlineAlert']['total']
     total_count += data['unplannedOperation']['total']
 
